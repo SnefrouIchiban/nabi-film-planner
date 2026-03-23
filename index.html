@@ -678,11 +678,42 @@ function updateSyncDot(){
 }
 
 // ── Init ──
+
+// Load all NaBi projects from Drive
+async function loadFromDrive() {
+  const token = getToken();
+  if (!token) return;
+  showToast('Chargement depuis Drive...');
+  try {
+    const q = encodeURIComponent("name contains 'nabi_' and mimeType='application/json'");
+    const res = await fetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    if (!data.files || !data.files.length) { showToast('Aucun projet sur Drive'); return; }
+    let loaded = 0;
+    for (const file of data.files) {
+      const proj = await fetch('https://www.googleapis.com/drive/v3/files/' + file.id + '?alt=media', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      }).then(r => r.json()).catch(() => null);
+      if (proj && proj.meta && proj.content) {
+        const id = file.name.replace('nabi_', '').replace('.json', '');
+        projects[id] = { meta: proj.meta, content: proj.content, driveFileId: file.id };
+        loaded++;
+      }
+    }
+    saveLocal();
+    renderHome();
+    showToast(loaded + ' projet' + (loaded > 1 ? 's' : '') + ' chargé' + (loaded > 1 ? 's' : '') + ' depuis Drive');
+  } catch(e) { showToast('Erreur Drive : ' + e.message); }
+}
+
 buildBeats();
 buildSeqs();
 loadLocal();
 renderHome();
 updateSyncDot();
+if (getToken()) loadFromDrive();
 </script>
 </body>
 </html>
