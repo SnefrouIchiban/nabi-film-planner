@@ -590,17 +590,18 @@ async function saveToCloud() {
   showToast('Sauvegarde en cours...');
   try {
     let fileId=p.driveFileId;
+    const sharedDriveId = '0B2YfUmISQRTfbEFmemtuRXBFMXc';
     if(fileId) {
-      await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,{
+      await fetch('https://www.googleapis.com/upload/drive/v3/files/'+fileId+'?uploadType=media&supportsAllDrives=true',{
         method:'PATCH',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body
       });
     } else {
-      const meta=await fetch('https://www.googleapis.com/drive/v3/files',{
+      const meta=await fetch('https://www.googleapis.com/drive/v3/files?supportsAllDrives=true',{
         method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
-        body:JSON.stringify({name:filename,mimeType:'application/json'})
+        body:JSON.stringify({name:filename,mimeType:'application/json',parents:[sharedDriveId]})
       }).then(r=>r.json());
       fileId=meta.id;
-      await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,{
+      await fetch('https://www.googleapis.com/upload/drive/v3/files/'+fileId+'?uploadType=media&supportsAllDrives=true',{
         method:'PATCH',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body
       });
       projects[currentProjectId].driveFileId=fileId;
@@ -686,14 +687,14 @@ async function loadFromDrive() {
   showToast('Chargement depuis Drive...');
   try {
     const q = encodeURIComponent("name contains 'nabi_' and mimeType='application/json'");
-    const res = await fetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)', {
+    const res = await fetch('https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=files(id,name)&includeItemsFromAllDrives=true&supportsAllDrives=true&corpora=drive&driveId=0B2YfUmISQRTfbEFmemtuRXBFMXc', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     const data = await res.json();
     if (!data.files || !data.files.length) { showToast('Aucun projet sur Drive'); return; }
     let loaded = 0;
     for (const file of data.files) {
-      const proj = await fetch('https://www.googleapis.com/drive/v3/files/' + file.id + '?alt=media', {
+      const proj = await fetch('https://www.googleapis.com/drive/v3/files/' + file.id + '?alt=media&supportsAllDrives=true', {
         headers: { 'Authorization': 'Bearer ' + token }
       }).then(r => r.json()).catch(() => null);
       if (proj && proj.meta && proj.content) {
