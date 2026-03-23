@@ -653,7 +653,7 @@ function handleDriveAuth(){
 function redirectToAuth(){
   const clientId='547937015541-nv8gji5oq9hfvqbgorboqr02047ujq10.apps.googleusercontent.com';
   const redirect=encodeURIComponent(window.location.origin+window.location.pathname);
-  const scope=encodeURIComponent('https://www.googleapis.com/auth/drive.file');
+  const scope=encodeURIComponent('https://www.googleapis.com/auth/drive');
   window.location.href=`https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirect}&response_type=token&scope=${scope}&prompt=consent`;
 }
 function getToken(){
