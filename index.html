@@ -5,196 +5,265 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NaBi — Film Planner</title>
 <style>
+:root {
+  --bg: #ffffff; --bg2: #f7f6f3; --bg3: #f0efe9;
+  --text: #1a1a18; --text2: #6b6b67; --text3: #a0a09b;
+  --border: rgba(0,0,0,0.09); --border2: rgba(0,0,0,0.16);
+  --radius: 10px; --radius-sm: 6px;
+  --blue-bg: #e6f1fb; --blue-text: #0c447c;
+  --purple-bg: #eeedfe; --purple-text: #3c3489;
+  --teal-bg: #e1f5ee; --teal-text: #085041;
+  --amber-bg: #faeeda; --amber-text: #854f0b;
+  --red-bg: #fcebeb; --red-text: #a32d2d;
+}
+@media (prefers-color-scheme: dark) {
   :root {
-    --bg: #ffffff;
-    --bg2: #f7f6f3;
-    --bg3: #f0efe9;
-    --text: #1a1a18;
-    --text2: #6b6b67;
-    --text3: #a0a09b;
-    --border: rgba(0,0,0,0.1);
-    --border2: rgba(0,0,0,0.18);
-    --radius: 10px;
-    --radius-sm: 6px;
-    --blue-bg: #e6f1fb; --blue-text: #0c447c;
-    --purple-bg: #eeedfe; --purple-text: #3c3489;
-    --teal-bg: #e1f5ee; --teal-text: #085041;
-    --amber-bg: #faeeda; --amber-text: #854f0b;
+    --bg: #1e1e1c; --bg2: #2a2a27; --bg3: #323230;
+    --text: #f0efe9; --text2: #a0a09b; --text3: #6b6b67;
+    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.14);
+    --blue-bg: #0c447c; --blue-text: #b5d4f4;
+    --purple-bg: #3c3489; --purple-text: #cecbf6;
+    --teal-bg: #085041; --teal-text: #9fe1cb;
+    --amber-bg: #633806; --amber-text: #fac775;
+    --red-bg: #791f1f; --red-text: #f7c1c1;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1e1e1c; --bg2: #2a2a27; --bg3: #323230;
-      --text: #f0efe9; --text2: #a0a09b; --text3: #6b6b67;
-      --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.15);
-      --blue-bg: #0c447c; --blue-text: #b5d4f4;
-      --purple-bg: #3c3489; --purple-text: #cecbf6;
-      --teal-bg: #085041; --teal-text: #9fe1cb;
-      --amber-bg: #633806; --amber-text: #fac775;
-    }
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
-  .topbar { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
-  .logo { font-size: 15px; font-weight: 500; color: var(--text); }
-  .project-name { font-size: 14px; color: var(--text2); border: none; background: none; color: var(--text); font-size: 14px; outline: none; width: 220px; }
-  .topbar-right { display: flex; align-items: center; gap: 8px; }
-  .btn { padding: 7px 14px; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; font-family: inherit; border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); transition: opacity 0.15s; }
-  .btn:hover { opacity: 0.75; }
-  .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-  .btn-google { display: flex; align-items: center; gap: 6px; }
-  .btn-google svg { width: 14px; height: 14px; }
-  .sync-status { font-size: 12px; color: var(--text3); }
-  .main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; }
-  .tabs { display: flex; gap: 2px; margin-bottom: 1.5rem; background: var(--bg2); border-radius: var(--radius); padding: 4px; }
-  .tab { flex: 1; padding: 7px 12px; font-size: 13px; font-weight: 400; cursor: pointer; border: none; background: none; color: var(--text2); border-radius: 7px; transition: all 0.15s; font-family: inherit; }
-  .tab.active { background: var(--bg); color: var(--text); font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-  .panel { display: none; }
-  .panel.active { display: block; }
-  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 12px; }
-  label { font-size: 11px; color: var(--text2); display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
-  input[type=text], textarea, select { width: 100%; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 14px; color: var(--text); font-family: inherit; resize: vertical; outline: none; line-height: 1.6; transition: border-color 0.15s; }
-  input[type=text]:focus, textarea:focus { border-color: var(--border2); }
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .section-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin: 1.5rem 0 0.75rem; }
-  .acte-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; display: inline-block; }
-  .acte1 { background: var(--blue-bg); color: var(--blue-text); }
-  .acte2 { background: var(--purple-bg); color: var(--purple-text); }
-  .acte3 { background: var(--teal-bg); color: var(--teal-text); }
-  .acte-header { display: flex; align-items: center; gap: 8px; margin: 1.5rem 0 0.75rem; }
-  .acte-header span { font-size: 11px; color: var(--text3); }
-  .beat-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
-  .beat-label { font-size: 12px; color: var(--text2); min-width: 130px; padding-top: 9px; flex-shrink: 0; }
-  .beat-page { font-size: 11px; color: var(--text3); min-width: 60px; text-align: right; padding-top: 9px; flex-shrink: 0; }
-  .beat-row textarea { flex: 1; min-height: 50px; }
-  .seq-row { display: grid; grid-template-columns: 90px 1fr 70px; gap: 8px; align-items: start; margin-bottom: 8px; }
-  .seq-num { font-size: 12px; color: var(--text3); padding-top: 9px; }
-  .perso-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 12px; }
-  .perso-header { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
-  .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; }
-  .av-blue { background: var(--blue-bg); color: var(--blue-text); }
-  .av-purple { background: var(--purple-bg); color: var(--purple-text); }
-  .av-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .av-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .perso-name-input { border: none; background: none; font-size: 15px; font-weight: 500; color: var(--text); padding: 0; width: 100%; outline: none; font-family: inherit; }
-  .perso-role-input { border: none; background: none; font-size: 12px; color: var(--text2); padding: 0; width: 100%; outline: none; font-family: inherit; margin-top: 2px; }
-  .add-btn { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; color: var(--text2); background: none; border: 0.5px dashed var(--border2); border-radius: var(--radius-sm); padding: 9px 14px; cursor: pointer; width: 100%; margin-top: 4px; font-family: inherit; }
-  .add-btn:hover { color: var(--text); border-color: var(--text); }
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--bg); border-radius: var(--radius); padding: 1.5rem; width: 480px; max-width: 90vw; border: 0.5px solid var(--border2); }
-  .modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
-  .modal p { font-size: 13px; color: var(--text2); margin-bottom: 1.25rem; line-height: 1.6; }
-  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
-  .modal input { margin-bottom: 10px; }
-  .docs-list { margin: 12px 0; max-height: 200px; overflow-y: auto; }
-  .doc-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; }
-  .doc-item:hover { background: var(--bg2); }
-  .doc-icon { width: 20px; height: 20px; flex-shrink: 0; }
-  .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; opacity: 0; transition: opacity 0.2s; z-index: 300; pointer-events: none; }
-  .toast.show { opacity: 1; }
-  .separator { height: 0.5px; background: var(--border); margin: 12px 0; }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
+
+/* TOPBAR */
+.topbar { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 15px; font-weight: 500; color: var(--text); cursor: pointer; }
+.logo span { font-weight: 400; color: var(--text2); }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.btn { padding: 7px 14px; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; font-family: inherit; border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); transition: opacity 0.15s; white-space: nowrap; }
+.btn:hover { opacity: 0.7; }
+.btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.btn-icon { display: flex; align-items: center; gap: 6px; }
+.sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); display: inline-block; }
+.sync-dot.connected { background: #1d9e75; }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* HOME */
+.home-wrap { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+.home-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.home-header h1 { font-size: 20px; font-weight: 500; }
+.project-list { display: flex; flex-direction: column; gap: 8px; }
+.project-item { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: border-color 0.15s; }
+.project-item:hover { border-color: var(--border2); }
+.project-item-left { display: flex; flex-direction: column; gap: 3px; }
+.project-item-title { font-size: 15px; font-weight: 500; }
+.project-item-meta { font-size: 12px; color: var(--text2); display: flex; gap: 10px; }
+.project-item-right { display: flex; align-items: center; gap: 8px; }
+.lock-icon { font-size: 13px; color: var(--text3); }
+.badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; }
+.badge-dev { background: var(--blue-bg); color: var(--blue-text); }
+.badge-prod { background: var(--teal-bg); color: var(--teal-text); }
+.badge-pause { background: var(--amber-bg); color: var(--amber-text); }
+.empty-state { text-align: center; padding: 3rem 0; color: var(--text3); font-size: 14px; }
+
+/* MODAL */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; }
+.overlay.open { display: flex; }
+.modal { background: var(--bg); border-radius: var(--radius); padding: 1.5rem; width: 420px; max-width: 92vw; border: 0.5px solid var(--border2); }
+.modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 6px; }
+.modal p { font-size: 13px; color: var(--text2); margin-bottom: 1.25rem; line-height: 1.6; }
+.modal label { font-size: 11px; color: var(--text2); display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+.modal input { width: 100%; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 14px; color: var(--text); font-family: inherit; outline: none; margin-bottom: 10px; }
+.modal input:focus { border-color: var(--border2); }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1rem; }
+.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.error-msg { font-size: 12px; color: var(--red-text); margin-top: -6px; margin-bottom: 8px; }
+select { width: 100%; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 14px; color: var(--text); font-family: inherit; outline: none; margin-bottom: 10px; }
+
+/* PROJECT VIEW */
+.project-topbar { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 52px; }
+.project-topbar-left { display: flex; align-items: center; gap: 12px; }
+.back-btn { font-size: 13px; color: var(--text2); cursor: pointer; border: none; background: none; font-family: inherit; padding: 0; }
+.back-btn:hover { color: var(--text); }
+.project-title-display { font-size: 15px; font-weight: 500; }
+.project-main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; }
+.tabs { display: flex; gap: 2px; margin-bottom: 1.5rem; background: var(--bg2); border-radius: var(--radius); padding: 4px; }
+.tab { flex: 1; padding: 7px 10px; font-size: 13px; cursor: pointer; border: none; background: none; color: var(--text2); border-radius: 7px; transition: all 0.15s; font-family: inherit; }
+.tab.active { background: var(--bg); color: var(--text); font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.panel { display: none; }
+.panel.active { display: block; }
+.card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 12px; }
+.card label { font-size: 11px; color: var(--text2); display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+.card input[type=text], .card textarea { width: 100%; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 14px; color: var(--text); font-family: inherit; resize: vertical; outline: none; line-height: 1.6; }
+.card input:focus, .card textarea:focus { border-color: var(--border2); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.acte-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; display: inline-block; }
+.acte1 { background: var(--blue-bg); color: var(--blue-text); }
+.acte2 { background: var(--purple-bg); color: var(--purple-text); }
+.acte3 { background: var(--teal-bg); color: var(--teal-text); }
+.acte-header { display: flex; align-items: center; gap: 8px; margin: 1.5rem 0 0.75rem; }
+.acte-header span { font-size: 11px; color: var(--text3); }
+.beat-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 8px; }
+.beat-label { font-size: 12px; color: var(--text2); min-width: 140px; padding-top: 9px; flex-shrink: 0; }
+.beat-page { font-size: 11px; color: var(--text3); min-width: 55px; text-align: right; padding-top: 9px; flex-shrink: 0; }
+.beat-row textarea { flex: 1; min-height: 50px; }
+.seq-row { display: grid; grid-template-columns: 90px 1fr 70px; gap: 8px; align-items: start; margin-bottom: 8px; }
+.seq-num { font-size: 12px; color: var(--text3); padding-top: 9px; }
+.perso-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 12px; }
+.perso-header { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+.av0 { background: var(--blue-bg); color: var(--blue-text); }
+.av1 { background: var(--purple-bg); color: var(--purple-text); }
+.av2 { background: var(--amber-bg); color: var(--amber-text); }
+.av3 { background: var(--teal-bg); color: var(--teal-text); }
+.perso-name-input { border: none; background: none; font-size: 15px; font-weight: 500; color: var(--text); padding: 0; width: 100%; outline: none; font-family: inherit; }
+.perso-role-input { border: none; background: none; font-size: 12px; color: var(--text2); padding: 0; width: 100%; outline: none; font-family: inherit; margin-top: 2px; }
+.add-btn { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; color: var(--text2); background: none; border: 0.5px dashed var(--border2); border-radius: var(--radius-sm); padding: 9px 14px; cursor: pointer; width: 100%; margin-top: 4px; font-family: inherit; }
+.add-btn:hover { color: var(--text); }
+.save-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid var(--border); }
+.save-status { font-size: 12px; color: var(--text3); }
+.toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; opacity: 0; transition: opacity 0.2s; z-index: 400; pointer-events: none; }
+.toast.show { opacity: 1; }
+.delete-btn { font-size: 12px; color: var(--red-text); background: none; border: none; cursor: pointer; font-family: inherit; padding: 4px 0; }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="topbar-left">
-    <span class="logo">NaBi <span style="font-weight:400;color:var(--text2)">Film Planner</span></span>
-    <span style="color:var(--border2)">|</span>
-    <input class="project-name" type="text" id="project-title" placeholder="Titre du projet..." value="" />
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+  <div class="topbar">
+    <div class="logo">NaBi <span>Film Planner</span></div>
+    <div class="topbar-right">
+      <span class="sync-dot" id="home-sync-dot"></span>
+      <button class="btn btn-icon" id="btn-gdrive" onclick="handleDriveAuth()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Google Drive
+      </button>
+      <button class="btn btn-primary" onclick="openNewProject()">+ Nouveau projet</button>
+    </div>
   </div>
-  <div class="topbar-right">
-    <span class="sync-status" id="sync-status"></span>
-    <button class="btn btn-google" id="btn-auth" onclick="handleAuthClick()">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-      </svg>
-      Connecter Google
-    </button>
-    <button class="btn" onclick="openSyncModal()">↕ Sync Docs</button>
-    <button class="btn btn-primary" onclick="exportTxt()">Exporter .txt</button>
+  <div class="home-wrap">
+    <div class="home-header">
+      <h1>Mes projets</h1>
+      <span id="project-count" style="font-size:13px;color:var(--text3)"></span>
+    </div>
+    <div class="project-list" id="project-list">
+      <div class="empty-state">Aucun projet — crée ton premier film</div>
+    </div>
   </div>
 </div>
 
-<div class="main">
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('synopsis',this)">Synopsis</button>
-    <button class="tab" onclick="switchTab('personnages',this)">Personnages</button>
-    <button class="tab" onclick="switchTab('beats',this)">Beats</button>
-    <button class="tab" onclick="switchTab('sequences',this)">Séquences</button>
-  </div>
-
-  <!-- SYNOPSIS -->
-  <div id="panel-synopsis" class="panel active">
-    <div class="card"><label>Titre de travail</label><input type="text" id="s-titre" placeholder="ex. Friendzone" oninput="autosave()" /></div>
-    <div class="row2">
-      <div class="card"><label>Genre</label><input type="text" id="s-genre" placeholder="ex. Comédie dramatique" oninput="autosave()" /></div>
-      <div class="card"><label>Contexte / époque</label><input type="text" id="s-contexte" placeholder="ex. Paris, aujourd'hui" oninput="autosave()" /></div>
+<!-- PROJECT PAGE -->
+<div id="page-project" class="page">
+  <div class="project-topbar">
+    <div class="project-topbar-left">
+      <button class="back-btn" onclick="goHome()">← Projets</button>
+      <span style="color:var(--border2)">|</span>
+      <span class="project-title-display" id="current-project-title"></span>
     </div>
-    <div class="card"><label>Logline (1–2 phrases)</label><textarea id="s-logline" rows="3" placeholder="Qui ? Veut quoi ? Contre quoi ? Enjeu ?" oninput="autosave()"></textarea></div>
-    <div class="card"><label>Prémisse thématique</label><textarea id="s-theme" rows="2" placeholder="La vérité profonde que le film cherche à démontrer..." oninput="autosave()"></textarea></div>
-    <div class="card"><label>Synopsis court (½ page)</label><textarea id="s-synopsis" rows="8" placeholder="Le film en quelques paragraphes..." oninput="autosave()"></textarea></div>
-    <div class="row2">
-      <div class="card"><label>Ton / registre</label><textarea id="s-ton" rows="2" placeholder="ex. Mélancolique et sec..." oninput="autosave()"></textarea></div>
-      <div class="card"><label>Références</label><textarea id="s-refs" rows="2" placeholder="ex. Rohmer + Kechiche..." oninput="autosave()"></textarea></div>
+    <div class="topbar-right">
+      <span class="save-status" id="autosave-status"></span>
+      <button class="btn" onclick="exportTxt()">Exporter .txt</button>
+      <button class="btn btn-primary" onclick="saveToCloud()">↑ Sauvegarder</button>
     </div>
   </div>
+  <div class="project-main">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('synopsis',this)">Synopsis</button>
+      <button class="tab" onclick="switchTab('personnages',this)">Personnages</button>
+      <button class="tab" onclick="switchTab('beats',this)">Beats</button>
+      <button class="tab" onclick="switchTab('sequences',this)">Séquences</button>
+    </div>
 
-  <!-- PERSONNAGES -->
-  <div id="panel-personnages" class="panel">
-    <div id="perso-list"></div>
-    <button class="add-btn" onclick="addPerso()">+ Ajouter un personnage</button>
-  </div>
+    <div id="panel-synopsis" class="panel active">
+      <div class="card"><label>Titre</label><input type="text" id="s-titre" oninput="localSave()" placeholder="Titre de travail" /></div>
+      <div class="row2">
+        <div class="card"><label>Genre</label><input type="text" id="s-genre" oninput="localSave()" placeholder="ex. Thriller" /></div>
+        <div class="card"><label>Contexte</label><input type="text" id="s-contexte" oninput="localSave()" placeholder="ex. Paris, 2026" /></div>
+      </div>
+      <div class="card"><label>Logline</label><textarea id="s-logline" rows="3" oninput="localSave()" placeholder="Qui ? Veut quoi ? Contre quoi ? Enjeu ?"></textarea></div>
+      <div class="card"><label>Prémisse thématique</label><textarea id="s-theme" rows="2" oninput="localSave()" placeholder="La vérité profonde que le film cherche à démontrer..."></textarea></div>
+      <div class="card"><label>Synopsis court</label><textarea id="s-synopsis" rows="8" oninput="localSave()" placeholder="Le film en quelques paragraphes..."></textarea></div>
+      <div class="row2">
+        <div class="card"><label>Ton / registre</label><textarea id="s-ton" rows="2" oninput="localSave()" placeholder="ex. Mélancolique et sec..."></textarea></div>
+        <div class="card"><label>Références</label><textarea id="s-refs" rows="2" oninput="localSave()" placeholder="ex. Rohmer + Kechiche..."></textarea></div>
+      </div>
+    </div>
 
-  <!-- BEATS -->
-  <div id="panel-beats" class="panel">
-    <p style="font-size:13px;color:var(--text2);margin-bottom:1.5rem">Structure en 15 beats — Save the Cat / Blake Snyder</p>
-    <div class="acte-header"><span class="acte-badge acte1">Acte I</span><span>pp. 1–25</span></div>
-    <div id="beats-1"></div>
-    <div class="acte-header"><span class="acte-badge acte2">Acte II</span><span>pp. 25–85</span></div>
-    <div id="beats-2"></div>
-    <div class="acte-header"><span class="acte-badge acte3">Acte III</span><span>pp. 85–110</span></div>
-    <div id="beats-3"></div>
-  </div>
+    <div id="panel-personnages" class="panel">
+      <div id="perso-list"></div>
+      <button class="add-btn" onclick="addPerso()">+ Ajouter un personnage</button>
+    </div>
 
-  <!-- SÉQUENCES -->
-  <div id="panel-sequences" class="panel">
-    <p style="font-size:13px;color:var(--text2);margin-bottom:1.5rem">12 séquences — une unité dramatique autonome par case</p>
-    <div id="seq-list"></div>
+    <div id="panel-beats" class="panel">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:1.5rem">15 beats — Save the Cat</p>
+      <div class="acte-header"><span class="acte-badge acte1">Acte I</span><span>pp. 1–25</span></div>
+      <div id="beats-1"></div>
+      <div class="acte-header"><span class="acte-badge acte2">Acte II</span><span>pp. 25–85</span></div>
+      <div id="beats-2"></div>
+      <div class="acte-header"><span class="acte-badge acte3">Acte III</span><span>pp. 85–110</span></div>
+      <div id="beats-3"></div>
+    </div>
+
+    <div id="panel-sequences" class="panel">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:1.5rem">12 séquences</p>
+      <div id="seq-list"></div>
+    </div>
   </div>
 </div>
 
-<!-- SYNC MODAL -->
-<div class="modal-overlay" id="sync-modal">
+<!-- MODAL: NOUVEAU PROJET -->
+<div class="overlay" id="modal-new">
   <div class="modal">
-    <h2>Synchronisation Google Docs</h2>
-    <p id="sync-modal-desc">Exporter vers un nouveau document ou importer depuis un document existant.</p>
-    <div id="sync-modal-body">
-      <button class="btn" style="width:100%;margin-bottom:8px;text-align:left;padding:10px 14px;" onclick="exportToNewDoc()">→ Exporter vers un nouveau Doc Google</button>
-      <div class="separator"></div>
-      <label style="margin-bottom:6px;">Importer depuis une URL Google Docs</label>
-      <input type="text" id="import-url" placeholder="https://docs.google.com/document/d/..." />
-      <button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="importFromDoc()">← Importer</button>
+    <h2>Nouveau projet</h2>
+    <p>Crée un nouveau film. Le mot de passe protège l'accès au projet.</p>
+    <label>Titre du film</label>
+    <input type="text" id="new-titre" placeholder="ex. Friendzone" />
+    <div class="modal-row">
+      <div><label>Genre</label><input type="text" id="new-genre" placeholder="ex. Comédie" /></div>
+      <div>
+        <label>Statut</label>
+        <select id="new-statut">
+          <option value="dev">En développement</option>
+          <option value="prod">En production</option>
+          <option value="pause">En pause</option>
+        </select>
+      </div>
     </div>
+    <label>Mot de passe</label>
+    <input type="password" id="new-password" placeholder="Choisir un mot de passe" />
+    <input type="password" id="new-password2" placeholder="Confirmer le mot de passe" />
+    <div class="error-msg" id="new-error"></div>
     <div class="modal-actions">
-      <button class="btn" onclick="closeSyncModal()">Fermer</button>
+      <button class="btn" onclick="closeModal('modal-new')">Annuler</button>
+      <button class="btn btn-primary" onclick="createProject()">Créer</button>
     </div>
   </div>
 </div>
 
-<!-- AUTH MODAL -->
-<div class="modal-overlay" id="auth-modal">
+<!-- MODAL: MOT DE PASSE -->
+<div class="overlay" id="modal-password">
   <div class="modal">
-    <h2>Connexion Google</h2>
-    <p>Pour synchroniser avec Google Docs, autorise l'accès à ton compte Google. Tu seras redirigé vers la page de connexion Google.</p>
+    <h2 id="pwd-modal-title">Ouvrir le projet</h2>
+    <p>Ce projet est protégé. Entre le mot de passe pour y accéder.</p>
+    <label>Mot de passe</label>
+    <input type="password" id="pwd-input" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkPassword()" />
+    <div class="error-msg" id="pwd-error"></div>
     <div class="modal-actions">
-      <button class="btn" onclick="closeAuthModal()">Annuler</button>
-      <button class="btn btn-primary" onclick="redirectToAuth()">Continuer →</button>
+      <button class="btn" onclick="closeModal('modal-password')">Annuler</button>
+      <button class="btn btn-primary" onclick="checkPassword()">Ouvrir</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: GOOGLE AUTH -->
+<div class="overlay" id="modal-auth">
+  <div class="modal">
+    <h2>Connexion Google Drive</h2>
+    <p>Tes projets seront sauvegardés comme fichiers JSON dans un dossier <strong>NaBi Film Planner</strong> sur ton Google Drive.</p>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-auth')">Annuler</button>
+      <button class="btn btn-primary" onclick="redirectToAuth()">Connecter →</button>
     </div>
   </div>
 </div>
@@ -202,345 +271,418 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ── Constants ──
 const BEATS_DATA = [
-  { acte:1, name:"Image d'ouverture", page:"p.1" },
-  { acte:1, name:"Thème énoncé", page:"p.5" },
-  { acte:1, name:"Mise en place", page:"pp.1–10" },
-  { acte:1, name:"Catalyseur", page:"p.12" },
-  { acte:1, name:"Débat", page:"pp.12–25" },
-  { acte:2, name:"Passage au 2e acte", page:"p.25" },
-  { acte:2, name:"B-story", page:"p.30" },
-  { acte:2, name:"Fun & games", page:"pp.30–55" },
-  { acte:2, name:"Médiane", page:"p.55" },
-  { acte:2, name:"Les obstacles s'accumulent", page:"pp.55–75" },
-  { acte:2, name:"Tout est perdu", page:"p.75" },
-  { acte:2, name:"Nuit obscure de l'âme", page:"pp.75–85" },
-  { acte:3, name:"Passage au 3e acte", page:"p.85" },
-  { acte:3, name:"Final", page:"pp.85–110" },
-  { acte:3, name:"Image finale", page:"p.110" },
+  {acte:1,name:"Image d'ouverture",page:"p.1"},
+  {acte:1,name:"Thème énoncé",page:"p.5"},
+  {acte:1,name:"Mise en place",page:"pp.1–10"},
+  {acte:1,name:"Catalyseur",page:"p.12"},
+  {acte:1,name:"Débat",page:"pp.12–25"},
+  {acte:2,name:"Passage au 2e acte",page:"p.25"},
+  {acte:2,name:"B-story",page:"p.30"},
+  {acte:2,name:"Fun & games",page:"pp.30–55"},
+  {acte:2,name:"Médiane",page:"p.55"},
+  {acte:2,name:"Les obstacles s'accumulent",page:"pp.55–75"},
+  {acte:2,name:"Tout est perdu",page:"p.75"},
+  {acte:2,name:"Nuit obscure de l'âme",page:"pp.75–85"},
+  {acte:3,name:"Passage au 3e acte",page:"p.85"},
+  {acte:3,name:"Final",page:"pp.85–110"},
+  {acte:3,name:"Image finale",page:"p.110"},
 ];
-
 const SEQS_DATA = [
-  { acte:1, label:"Séq. 1", hint:"Exposition — monde ordinaire" },
-  { acte:1, label:"Séq. 2", hint:"Catalyseur et dilemme" },
-  { acte:1, label:"Séq. 3", hint:"Fin du 1er acte — engagement" },
-  { acte:2, label:"Séq. 4", hint:"Premier obstacle, nouveau monde" },
-  { acte:2, label:"Séq. 5", hint:"Montée des enjeux" },
-  { acte:2, label:"Séq. 6", hint:"Fausse victoire / médiane" },
-  { acte:2, label:"Séq. 7", hint:"Complication et retournement" },
-  { acte:2, label:"Séq. 8", hint:"Crise — tout est perdu" },
-  { acte:2, label:"Séq. 9", hint:"Nuit obscure de l'âme" },
-  { acte:3, label:"Séq. 10", hint:"Décision finale / dernier effort" },
-  { acte:3, label:"Séq. 11", hint:"Climax" },
-  { acte:3, label:"Séq. 12", hint:"Résolution" },
+  {acte:1,label:"Séq. 1",hint:"Exposition — monde ordinaire"},
+  {acte:1,label:"Séq. 2",hint:"Catalyseur et dilemme"},
+  {acte:1,label:"Séq. 3",hint:"Fin du 1er acte — engagement"},
+  {acte:2,label:"Séq. 4",hint:"Premier obstacle, nouveau monde"},
+  {acte:2,label:"Séq. 5",hint:"Montée des enjeux"},
+  {acte:2,label:"Séq. 6",hint:"Fausse victoire / médiane"},
+  {acte:2,label:"Séq. 7",hint:"Complication et retournement"},
+  {acte:2,label:"Séq. 8",hint:"Crise — tout est perdu"},
+  {acte:2,label:"Séq. 9",hint:"Nuit obscure de l'âme"},
+  {acte:3,label:"Séq. 10",hint:"Décision finale / dernier effort"},
+  {acte:3,label:"Séq. 11",hint:"Climax"},
+  {acte:3,label:"Séq. 12",hint:"Résolution"},
 ];
+const STATUT_LABELS = {dev:'En développement',prod:'En production',pause:'En pause'};
+const STATUT_CLASSES = {dev:'badge-dev',prod:'badge-prod',pause:'badge-pause'};
 
-const AV_COLORS = ['av-blue','av-purple','av-amber','av-teal'];
+// ── State ──
+let projects = {}; // {id: {meta, content, driveFileId}}
+let currentProjectId = null;
 let persoCount = 0;
 let accessToken = null;
 let saveTimer = null;
 
-// ── Build UI ──
+// ── Hash password (simple, client-side) ──
+async function hashPwd(pwd) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── Local storage ──
+function loadLocal() {
+  const raw = localStorage.getItem('nabi-projects');
+  if(raw) try { projects = JSON.parse(raw); } catch(e) {}
+}
+function saveLocal() {
+  localStorage.setItem('nabi-projects', JSON.stringify(projects));
+}
+
+// ── Render home ──
+function renderHome() {
+  const list = document.getElementById('project-list');
+  const ids = Object.keys(projects);
+  document.getElementById('project-count').textContent = ids.length ? ids.length + ' projet' + (ids.length>1?'s':'') : '';
+  if(!ids.length) {
+    list.innerHTML = '<div class="empty-state">Aucun projet — crée ton premier film</div>';
+    return;
+  }
+  list.innerHTML = ids.map(id => {
+    const p = projects[id];
+    const m = p.meta;
+    const statut = m.statut || 'dev';
+    return `<div class="project-item" onclick="openProject('${id}')">
+      <div class="project-item-left">
+        <div class="project-item-title">${m.titre||'Sans titre'}</div>
+        <div class="project-item-meta">
+          <span>${m.genre||'—'}</span>
+          <span>${m.updatedAt ? 'Modifié ' + formatDate(m.updatedAt) : ''}</span>
+        </div>
+      </div>
+      <div class="project-item-right">
+        <span class="badge ${STATUT_CLASSES[statut]}">${STATUT_LABELS[statut]}</span>
+        <span class="lock-icon">🔒</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  const now = new Date();
+  const diff = Math.floor((now - d) / 86400000);
+  if(diff === 0) return "aujourd'hui";
+  if(diff === 1) return "hier";
+  return d.toLocaleDateString('fr-FR', {day:'numeric',month:'short'});
+}
+
+// ── New project ──
+function openNewProject() {
+  document.getElementById('new-titre').value = '';
+  document.getElementById('new-genre').value = '';
+  document.getElementById('new-password').value = '';
+  document.getElementById('new-password2').value = '';
+  document.getElementById('new-error').textContent = '';
+  openModal('modal-new');
+  setTimeout(()=>document.getElementById('new-titre').focus(), 100);
+}
+
+async function createProject() {
+  const titre = document.getElementById('new-titre').value.trim();
+  const genre = document.getElementById('new-genre').value.trim();
+  const statut = document.getElementById('new-statut').value;
+  const pwd = document.getElementById('new-password').value;
+  const pwd2 = document.getElementById('new-password2').value;
+  const err = document.getElementById('new-error');
+  if(!titre) { err.textContent = 'Le titre est requis'; return; }
+  if(!pwd) { err.textContent = 'Le mot de passe est requis'; return; }
+  if(pwd !== pwd2) { err.textContent = 'Les mots de passe ne correspondent pas'; return; }
+  const hash = await hashPwd(pwd);
+  const id = 'proj_' + Date.now();
+  projects[id] = {
+    meta: { titre, genre, statut, passwordHash: hash, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+    content: { synopsis:{titre,genre,contexte:'',logline:'',theme:'',synopsis:'',ton:'',refs:''}, persos:[], beats:Array(15).fill(''), seqs:Array(12).fill({text:'',page:''}) },
+    driveFileId: null
+  };
+  saveLocal();
+  closeModal('modal-new');
+  renderHome();
+  showToast('Projet créé');
+}
+
+// ── Open project (password check) ──
+let pendingOpenId = null;
+function openProject(id) {
+  pendingOpenId = id;
+  const p = projects[id];
+  document.getElementById('pwd-modal-title').textContent = 'Ouvrir — ' + (p.meta.titre||'Sans titre');
+  document.getElementById('pwd-input').value = '';
+  document.getElementById('pwd-error').textContent = '';
+  openModal('modal-password');
+  setTimeout(()=>document.getElementById('pwd-input').focus(), 100);
+}
+
+async function checkPassword() {
+  const pwd = document.getElementById('pwd-input').value;
+  const hash = await hashPwd(pwd);
+  const p = projects[pendingOpenId];
+  if(hash !== p.meta.passwordHash) {
+    document.getElementById('pwd-error').textContent = 'Mot de passe incorrect';
+    return;
+  }
+  closeModal('modal-password');
+  loadProject(pendingOpenId);
+}
+
+// ── Load project into editor ──
+function loadProject(id) {
+  currentProjectId = id;
+  const p = projects[id];
+  document.getElementById('current-project-title').textContent = p.meta.titre || 'Sans titre';
+  const c = p.content;
+
+  // Synopsis
+  const s = c.synopsis || {};
+  setVal('s-titre', s.titre); setVal('s-genre', s.genre); setVal('s-contexte', s.contexte);
+  setVal('s-logline', s.logline); setVal('s-theme', s.theme); setVal('s-synopsis', s.synopsis);
+  setVal('s-ton', s.ton); setVal('s-refs', s.refs);
+
+  // Beats
+  (c.beats||[]).forEach((v,i) => setVal('beat-'+i, v));
+
+  // Seqs
+  (c.seqs||[]).forEach((v,i) => { setVal('seq-'+i, v.text||''); setVal('seq-p-'+i, v.page||''); });
+
+  // Persos
+  document.getElementById('perso-list').innerHTML = '';
+  persoCount = 0;
+  (c.persos||[]).forEach(p => addPerso(p));
+  if(!c.persos?.length) addPerso();
+
+  // Reset tabs
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelector('.tab').classList.add('active');
+  document.getElementById('panel-synopsis').classList.add('active');
+
+  showPage('page-project');
+}
+
+function setVal(id, val) { const el=document.getElementById(id); if(el) el.value=val||''; }
+
+// ── Go home ──
+function goHome() {
+  showPage('page-home');
+  renderHome();
+}
+
+// ── Build beats & seqs (once) ──
 function buildBeats() {
   [1,2,3].forEach(a => {
     const el = document.getElementById('beats-'+a);
-    BEATS_DATA.filter(b=>b.acte===a).forEach((b,i) => {
+    BEATS_DATA.filter(b=>b.acte===a).forEach(b => {
       const idx = BEATS_DATA.indexOf(b);
       el.innerHTML += `<div class="beat-row">
         <span class="beat-label">${b.name}</span>
-        <textarea rows="2" id="beat-${idx}" placeholder="Que se passe-t-il ?" oninput="autosave()"></textarea>
+        <textarea rows="2" id="beat-${idx}" placeholder="Que se passe-t-il ?" oninput="localSave()"></textarea>
         <span class="beat-page">${b.page}</span>
       </div>`;
     });
   });
 }
-
 function buildSeqs() {
   const el = document.getElementById('seq-list');
   let lastActe = 0;
   SEQS_DATA.forEach((s,i) => {
-    if(s.acte !== lastActe) {
-      const cls = ['','acte1','acte2','acte3'][s.acte];
-      const lbl = ['','Acte I','Acte II','Acte III'][s.acte];
-      el.innerHTML += `<div class="acte-header"><span class="acte-badge ${cls}">${lbl}</span></div>`;
-      lastActe = s.acte;
+    if(s.acte!==lastActe) {
+      const cls=['','acte1','acte2','acte3'][s.acte];
+      const lbl=['','Acte I','Acte II','Acte III'][s.acte];
+      el.innerHTML+=`<div class="acte-header"><span class="acte-badge ${cls}">${lbl}</span></div>`;
+      lastActe=s.acte;
     }
-    el.innerHTML += `<div class="seq-row">
+    el.innerHTML+=`<div class="seq-row">
       <span class="seq-num">${s.label}</span>
-      <textarea rows="3" id="seq-${i}" placeholder="${s.hint}" oninput="autosave()"></textarea>
-      <input type="text" id="seq-p-${i}" placeholder="pp." oninput="autosave()" />
+      <textarea rows="3" id="seq-${i}" placeholder="${s.hint}" oninput="localSave()"></textarea>
+      <input type="text" id="seq-p-${i}" placeholder="pp." oninput="localSave()" style="height:36px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-size:14px;color:var(--text);font-family:inherit;outline:none;" />
     </div>`;
   });
 }
 
+// ── Persos ──
 function addPerso(data) {
   const idx = persoCount;
-  const cls = AV_COLORS[idx % AV_COLORS.length];
-  const d = data || {};
-  const initials = d.name ? d.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) : '—';
+  const d = data||{};
+  const ini = d.name ? d.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) : '—';
   const div = document.createElement('div');
-  div.className = 'perso-card';
-  div.id = 'perso-card-'+idx;
-  div.innerHTML = `<div class="perso-header">
-    <div class="avatar ${cls}" id="av-${idx}">${initials}</div>
+  div.className='perso-card'; div.id='perso-card-'+idx;
+  div.innerHTML=`<div class="perso-header">
+    <div class="avatar av${idx%4}" id="av-${idx}">${ini}</div>
     <div style="flex:1">
-      <input class="perso-name-input" type="text" id="pn-${idx}" placeholder="Prénom Nom" value="${d.name||''}" oninput="updateAv(${idx});autosave()" />
-      <input class="perso-role-input" type="text" id="pr-${idx}" placeholder="Rôle — ex. Protagoniste" value="${d.role||''}" oninput="autosave()" />
+      <input class="perso-name-input" type="text" id="pn-${idx}" placeholder="Prénom Nom" value="${d.name||''}" oninput="updateAv(${idx});localSave()" />
+      <input class="perso-role-input" type="text" id="pr-${idx}" placeholder="Rôle" value="${d.role||''}" oninput="localSave()" />
     </div>
-    <button onclick="removePerso(${idx})" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:0 4px;">×</button>
+    <button onclick="removePerso(${idx})" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;line-height:1;padding:0 4px;">×</button>
   </div>
   <div class="mini-grid">
-    <div><label>Désir conscient</label><textarea rows="2" id="pd-${idx}" placeholder="Ce qu'il/elle veut..." oninput="autosave()">${d.desire||''}</textarea></div>
-    <div><label>Besoin profond</label><textarea rows="2" id="pb-${idx}" placeholder="Ce dont il/elle a besoin..." oninput="autosave()">${d.besoin||''}</textarea></div>
-    <div><label>Blessure / ghost</label><textarea rows="2" id="pg-${idx}" placeholder="Trauma ou passé..." oninput="autosave()">${d.ghost||''}</textarea></div>
-    <div><label>Arc — état final</label><textarea rows="2" id="pa-${idx}" placeholder="Où en est-il/elle ?" oninput="autosave()">${d.arc||''}</textarea></div>
+    <div><label>Désir conscient</label><textarea rows="2" id="pd-${idx}" oninput="localSave()" placeholder="Ce qu'il/elle veut...">${d.desire||''}</textarea></div>
+    <div><label>Besoin profond</label><textarea rows="2" id="pb-${idx}" oninput="localSave()" placeholder="Ce dont il/elle a besoin...">${d.besoin||''}</textarea></div>
+    <div><label>Blessure / ghost</label><textarea rows="2" id="pg-${idx}" oninput="localSave()" placeholder="Trauma ou passé...">${d.ghost||''}</textarea></div>
+    <div><label>Arc — état final</label><textarea rows="2" id="pa-${idx}" oninput="localSave()" placeholder="Où en est-il/elle ?">${d.arc||''}</textarea></div>
   </div>`;
   document.getElementById('perso-list').appendChild(div);
   persoCount++;
-  autosave();
 }
-
-function removePerso(idx) {
-  const card = document.getElementById('perso-card-'+idx);
-  if(card) card.remove();
-  autosave();
-}
-
+function removePerso(idx) { document.getElementById('perso-card-'+idx)?.remove(); localSave(); }
 function updateAv(idx) {
-  const val = document.getElementById('pn-'+idx).value.trim();
-  const words = val.split(' ');
-  const ini = words.length>=2 ? words[0][0]+words[1][0] : (words[0]?.[0]||'—');
-  document.getElementById('av-'+idx).textContent = ini.toUpperCase();
+  const words=(document.getElementById('pn-'+idx).value||'').trim().split(' ');
+  const ini=words.length>=2?words[0][0]+words[1][0]:(words[0]?.[0]||'—');
+  document.getElementById('av-'+idx).textContent=ini.toUpperCase();
+}
+
+// ── Get current state ──
+function getCurrentContent() {
+  const persos=[];
+  document.querySelectorAll('.perso-card').forEach(card=>{
+    const idx=card.id.replace('perso-card-','');
+    persos.push({
+      name:document.getElementById('pn-'+idx)?.value||'',
+      role:document.getElementById('pr-'+idx)?.value||'',
+      desire:document.getElementById('pd-'+idx)?.value||'',
+      besoin:document.getElementById('pb-'+idx)?.value||'',
+      ghost:document.getElementById('pg-'+idx)?.value||'',
+      arc:document.getElementById('pa-'+idx)?.value||'',
+    });
+  });
+  return {
+    synopsis:{
+      titre:document.getElementById('s-titre').value,
+      genre:document.getElementById('s-genre').value,
+      contexte:document.getElementById('s-contexte').value,
+      logline:document.getElementById('s-logline').value,
+      theme:document.getElementById('s-theme').value,
+      synopsis:document.getElementById('s-synopsis').value,
+      ton:document.getElementById('s-ton').value,
+      refs:document.getElementById('s-refs').value,
+    },
+    persos,
+    beats:BEATS_DATA.map((_,i)=>document.getElementById('beat-'+i)?.value||''),
+    seqs:SEQS_DATA.map((_,i)=>({text:document.getElementById('seq-'+i)?.value||'',page:document.getElementById('seq-p-'+i)?.value||''})),
+  };
+}
+
+// ── Local autosave ──
+function localSave() {
+  if(!currentProjectId) return;
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    projects[currentProjectId].content=getCurrentContent();
+    projects[currentProjectId].meta.updatedAt=new Date().toISOString();
+    // Update title in meta
+    const t=document.getElementById('s-titre').value;
+    if(t) { projects[currentProjectId].meta.titre=t; document.getElementById('current-project-title').textContent=t; }
+    saveLocal();
+    document.getElementById('autosave-status').textContent='Sauvegardé localement';
+    setTimeout(()=>document.getElementById('autosave-status').textContent='',2000);
+  },700);
+}
+
+// ── Save to Google Drive ──
+async function saveToCloud() {
+  const token=getToken();
+  if(!token){showToast('Connecte d\'abord Google Drive');return;}
+  if(!currentProjectId) return;
+  projects[currentProjectId].content=getCurrentContent();
+  projects[currentProjectId].meta.updatedAt=new Date().toISOString();
+  saveLocal();
+  const p=projects[currentProjectId];
+  const filename=`nabi_${currentProjectId}.json`;
+  const body=JSON.stringify({meta:p.meta,content:p.content},null,2);
+  showToast('Sauvegarde en cours...');
+  try {
+    let fileId=p.driveFileId;
+    if(fileId) {
+      await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,{
+        method:'PATCH',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body
+      });
+    } else {
+      const meta=await fetch('https://www.googleapis.com/drive/v3/files',{
+        method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+        body:JSON.stringify({name:filename,mimeType:'application/json'})
+      }).then(r=>r.json());
+      fileId=meta.id;
+      await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,{
+        method:'PATCH',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body
+      });
+      projects[currentProjectId].driveFileId=fileId;
+      saveLocal();
+    }
+    showToast('Sauvegardé sur Drive ✓');
+  } catch(e){showToast('Erreur Drive : '+e.message);}
+}
+
+// ── Export TXT ──
+function exportTxt() {
+  const c=getCurrentContent(); const s=c.synopsis;
+  let out=`=== ${s.titre||'Plan'} ===\n\nLOGLINE\n${s.logline}\n\nTHÈME\n${s.theme}\n\nSYNOPSIS\n${s.synopsis}\n\n`;
+  out+=`PERSONNAGES\n`;
+  c.persos.forEach(p=>out+=`\n${p.name} (${p.role})\nDésir: ${p.desire}\nBesoin: ${p.besoin}\nGhost: ${p.ghost}\nArc: ${p.arc}\n`);
+  out+=`\nBEATS\n`;
+  BEATS_DATA.forEach((b,i)=>{if(c.beats[i])out+=`\n${b.name}: ${c.beats[i]}\n`;});
+  out+=`\nSÉQUENCES\n`;
+  SEQS_DATA.forEach((sq,i)=>{if(c.seqs[i]?.text)out+=`\n${sq.label}: ${c.seqs[i].text}\n`;});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([out],{type:'text/plain'}));
+  a.download=(s.titre||'plan').replace(/\s+/g,'-').toLowerCase()+'.txt';
+  a.click();
 }
 
 // ── Tabs ──
-function switchTab(name, btn) {
+function switchTab(name,btn) {
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('panel-'+name).classList.add('active');
 }
 
-// ── Local storage autosave ──
-function getState() {
-  const persos = [];
-  document.querySelectorAll('.perso-card').forEach(card => {
-    const idx = card.id.replace('perso-card-','');
-    persos.push({
-      name: document.getElementById('pn-'+idx)?.value||'',
-      role: document.getElementById('pr-'+idx)?.value||'',
-      desire: document.getElementById('pd-'+idx)?.value||'',
-      besoin: document.getElementById('pb-'+idx)?.value||'',
-      ghost: document.getElementById('pg-'+idx)?.value||'',
-      arc: document.getElementById('pa-'+idx)?.value||'',
-    });
-  });
-  const beats = BEATS_DATA.map((_,i) => document.getElementById('beat-'+i)?.value||'');
-  const seqs = SEQS_DATA.map((_,i) => ({
-    text: document.getElementById('seq-'+i)?.value||'',
-    page: document.getElementById('seq-p-'+i)?.value||''
-  }));
-  return {
-    titre: document.getElementById('s-titre').value,
-    genre: document.getElementById('s-genre').value,
-    contexte: document.getElementById('s-contexte').value,
-    logline: document.getElementById('s-logline').value,
-    theme: document.getElementById('s-theme').value,
-    synopsis: document.getElementById('s-synopsis').value,
-    ton: document.getElementById('s-ton').value,
-    refs: document.getElementById('s-refs').value,
-    projectTitle: document.getElementById('project-title').value,
-    persos, beats, seqs
-  };
+// ── Pages ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
-function setState(s) {
-  if(!s) return;
-  const set = (id, val) => { const el=document.getElementById(id); if(el) el.value=val||''; };
-  set('s-titre',s.titre); set('s-genre',s.genre); set('s-contexte',s.contexte);
-  set('s-logline',s.logline); set('s-theme',s.theme); set('s-synopsis',s.synopsis);
-  set('s-ton',s.ton); set('s-refs',s.refs); set('project-title',s.projectTitle);
-  document.getElementById('perso-list').innerHTML = '';
-  persoCount = 0;
-  (s.persos||[]).forEach(p => addPerso(p));
-  (s.beats||[]).forEach((v,i) => set('beat-'+i, v));
-  (s.seqs||[]).forEach((v,i) => { set('seq-'+i, v.text); set('seq-p-'+i, v.page); });
-}
-
-function autosave() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    localStorage.setItem('screenplay-plan', JSON.stringify(getState()));
-    document.getElementById('sync-status').textContent = 'Sauvegardé localement';
-    setTimeout(()=>document.getElementById('sync-status').textContent='', 2000);
-  }, 600);
-}
-
-function loadLocal() {
-  const raw = localStorage.getItem('screenplay-plan');
-  if(raw) { try { setState(JSON.parse(raw)); } catch(e) {} }
-}
-
-// ── Export TXT ──
-function exportTxt() {
-  const s = getState();
-  let out = `=== PLAN DE LONG MÉTRAGE ===\n`;
-  out += `Projet : ${s.projectTitle||'—'}\n\n`;
-  out += `TITRE : ${s.titre}\nGENRE : ${s.genre}\nCONTEXTE : ${s.contexte}\n\n`;
-  out += `LOGLINE\n${s.logline}\n\nTHÈME\n${s.theme}\n\nSYNOPSIS\n${s.synopsis}\n\nTON\n${s.ton}\n\nRÉFÉRENCES\n${s.refs}\n\n`;
-  out += `=== PERSONNAGES ===\n`;
-  s.persos.forEach(p => {
-    out += `\n${p.name} (${p.role})\nDésir : ${p.desire}\nBesoin : ${p.besoin}\nGhost : ${p.ghost}\nArc : ${p.arc}\n`;
-  });
-  out += `\n=== BEATS ===\n`;
-  BEATS_DATA.forEach((b,i) => { if(s.beats[i]) out += `\n${b.name} (${b.page})\n${s.beats[i]}\n`; });
-  out += `\n=== SÉQUENCES ===\n`;
-  SEQS_DATA.forEach((sq,i) => { if(s.seqs[i]?.text) out += `\n${sq.label} ${s.seqs[i].page||''}\n${s.seqs[i].text}\n`; });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([out],{type:'text/plain'}));
-  a.download = (s.titre||'plan-scenario').replace(/\s+/g,'-').toLowerCase()+'.txt';
-  a.click();
-}
+// ── Modals ──
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
 
 // ── Google Auth ──
-function handleAuthClick() {
-  document.getElementById('auth-modal').classList.add('open');
+function handleDriveAuth(){
+  if(getToken()){showToast('Drive déjà connecté ✓');return;}
+  openModal('modal-auth');
 }
-function closeAuthModal() { document.getElementById('auth-modal').classList.remove('open'); }
-function redirectToAuth() {
-  const base = 'https://nabi-film-planner.vercel.app/api';
-  window.location.href = base + '/auth';
+function redirectToAuth(){
+  const clientId=window.GOOGLE_CLIENT_ID||'YOUR_CLIENT_ID';
+  const redirect=encodeURIComponent(window.location.origin+window.location.pathname);
+  const scope=encodeURIComponent('https://www.googleapis.com/auth/drive.file');
+  window.location.href=`https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirect}&response_type=token&scope=${scope}&prompt=consent`;
 }
-
-// ── Sync Modal ──
-function openSyncModal() { document.getElementById('sync-modal').classList.add('open'); }
-function closeSyncModal() { document.getElementById('sync-modal').classList.remove('open'); }
-
-// ── State → Docs text ──
-function stateToDocsText() {
-  const s = getState();
-  let lines = [];
-  lines.push('PLAN DE LONG MÉTRAGE — ' + (s.titre||'Sans titre'));
-  lines.push('');
-  lines.push('SYNOPSIS');
-  lines.push('Logline : ' + (s.logline||''));
-  lines.push('Thème : ' + (s.theme||''));
-  lines.push('Synopsis : ' + (s.synopsis||''));
-  lines.push('');
-  lines.push('PERSONNAGES');
-  s.persos.forEach(p => {
-    lines.push(p.name + ' — ' + p.role);
-    lines.push('  Désir : ' + p.desire);
-    lines.push('  Besoin : ' + p.besoin);
-    lines.push('  Ghost : ' + p.ghost);
-    lines.push('  Arc : ' + p.arc);
-  });
-  lines.push('');
-  lines.push('BEATS');
-  BEATS_DATA.forEach((b,i) => lines.push(b.name + ' : ' + (s.beats[i]||'')));
-  lines.push('');
-  lines.push('SÉQUENCES');
-  SEQS_DATA.forEach((sq,i) => lines.push(sq.label + ' : ' + (s.seqs[i]?.text||'')));
-  return lines.join('\n');
-}
-
-// ── Export to Google Docs ──
-async function exportToNewDoc() {
-  const token = getToken();
-  if(!token) { showToast('Connecte d\'abord ton compte Google'); return; }
-  const title = document.getElementById('s-titre').value || 'Plan scénario';
-  const content = stateToDocsText();
-  showToast('Création du document...');
-  try {
-    const res = await fetch('https://docs.googleapis.com/v1/documents', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer '+token, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title })
-    });
-    const doc = await res.json();
-    if(!doc.documentId) { showToast('Erreur Google Docs'); return; }
-    await fetch(`https://docs.googleapis.com/v1/documents/${doc.documentId}:batchUpdate`, {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer '+token, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ requests: [{ insertText: { location: { index: 1 }, text: content } }] })
-    });
-    showToast('Document créé !');
-    window.open('https://docs.google.com/document/d/'+doc.documentId+'/edit', '_blank');
-    closeSyncModal();
-  } catch(e) { showToast('Erreur : ' + e.message); }
-}
-
-// ── Import from Google Docs ──
-async function importFromDoc() {
-  const token = getToken();
-  if(!token) { showToast('Connecte d\'abord ton compte Google'); return; }
-  const url = document.getElementById('import-url').value.trim();
-  const match = url.match(/\/document\/d\/([a-zA-Z0-9_-]+)/);
-  if(!match) { showToast('URL invalide'); return; }
-  const docId = match[1];
-  showToast('Importation...');
-  try {
-    const res = await fetch(`https://docs.googleapis.com/v1/documents/${docId}`, {
-      headers: { 'Authorization': 'Bearer '+token }
-    });
-    const doc = await res.json();
-    const text = doc.body.content
-      .filter(b=>b.paragraph)
-      .flatMap(b=>b.paragraph.elements)
-      .map(e=>e.textRun?.content||'')
-      .join('');
-    parseAndSetState(text);
-    closeSyncModal();
-    showToast('Importé avec succès');
-    autosave();
-  } catch(e) { showToast('Erreur import : ' + e.message); }
-}
-
-function parseAndSetState(text) {
-  const s = getState();
-  const lines = text.split('\n');
-  let section = null;
-  let currentBeatIdx = -1;
-  let currentSeqIdx = -1;
-  lines.forEach(line => {
-    const l = line.trim();
-    if(l.startsWith('Logline :')) { s.logline = l.replace('Logline :','').trim(); return; }
-    if(l.startsWith('Thème :')) { s.theme = l.replace('Thème :','').trim(); return; }
-    if(l.startsWith('Synopsis :')) { s.synopsis = l.replace('Synopsis :','').trim(); return; }
-    BEATS_DATA.forEach((b,i) => {
-      if(l.startsWith(b.name+' :')) { s.beats[i] = l.replace(b.name+' :','').trim(); }
-    });
-    SEQS_DATA.forEach((sq,i) => {
-      if(l.startsWith(sq.label+' :')) { if(!s.seqs[i]) s.seqs[i]={text:'',page:''}; s.seqs[i].text = l.replace(sq.label+' :','').trim(); }
-    });
-  });
-  setState(s);
-}
-
-function getToken() {
+function getToken(){
   if(accessToken) return accessToken;
-  const params = new URLSearchParams(window.location.hash.replace('#',''));
-  const t = params.get('access_token');
-  if(t) { accessToken = t; window.history.replaceState(null,'',window.location.pathname); }
+  const hash=window.location.hash.replace('#','');
+  const params=new URLSearchParams(hash);
+  const t=params.get('access_token');
+  if(t){accessToken=t;window.history.replaceState(null,'',window.location.pathname);}
   return accessToken;
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2800);
+// ── Toast ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── Update sync dot ──
+function updateSyncDot(){
+  const dot=document.getElementById('home-sync-dot');
+  if(getToken()){dot.classList.add('connected');document.getElementById('btn-gdrive').textContent='Drive connecté ✓';}
 }
 
 // ── Init ──
 buildBeats();
 buildSeqs();
-if(persoCount === 0) addPerso();
 loadLocal();
-if(getToken()) {
-  document.getElementById('btn-auth').textContent = '✓ Google connecté';
-  document.getElementById('btn-auth').disabled = true;
-}
+renderHome();
+updateSyncDot();
 </script>
 </body>
 </html>
